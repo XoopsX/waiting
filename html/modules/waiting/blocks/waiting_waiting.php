@@ -63,6 +63,11 @@ function b_waiting_waiting_show($options)
 	$xoopsDB =& Database::getInstance();
 	$module_handler =& xoops_gethandler('module');
 	$block = array();
+	$pendingIni = array(
+		'adminlink' => '',
+		'pendingnum' => 0,
+		'lang_linkname' => ''
+	);
 
 	// get module's list installed
 	$mod_lists = $module_handler->getList(new Criteria(1,1),true);
@@ -82,7 +87,7 @@ function b_waiting_waiting_show($options)
 			$_tmp = call_user_func( $plugin_info['func'] , $dirname ) ;
 			if( isset( $_tmp["lang_linkname"] ) ) {
 				if( @$_tmp["pendingnum"] > 0 || $options[0] > 0){
-					$block["modules"][$dirname]["pending"][] = $_tmp;
+					$block["modules"][$dirname]["pending"][] = array_merge( $pendingIni , $_tmp );
 				}
 				unset( $_tmp ) ;
 			} else {
@@ -90,7 +95,7 @@ function b_waiting_waiting_show($options)
 				// if lang_linkname does not exist
 				foreach( $_tmp as $_one ) {
 					if( @$_one["pendingnum"] > 0 || $options[0] > 0){
-						$block["modules"][$dirname]["pending"][] = $_one;
+						$block["modules"][$dirname]["pending"][] = array_merge( $pendingIni , $_one );
 					}
 				}
 			}
